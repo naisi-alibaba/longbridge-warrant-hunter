@@ -1,4 +1,4 @@
-# HK Warrant Hunter · 港股权证盈亏比猎手
+# Longbridge Warrant Hunter · 港股权证盈亏比猎手
 
 > A Claude **Agent Skill** that hunts high risk-reward Hong Kong warrants (窝轮) and CBBCs (牛熊证), long & short, on top of the **Longbridge OpenAPI MCP**. Direction-first, evidence-driven — not a news summarizer.
 
@@ -20,14 +20,37 @@
 
 ## 📦 安装
 
-这是标准 Agent Skill（`SKILL.md` + `reference/`）。放到 Claude 能加载技能的目录即可，例如：
+> 仓库根目录即技能本体（`SKILL.md` + `reference/`）。注意：**技能目录名 = 斜杠命令**，所以克隆时目标文件夹请命名为 `longbridge-warrant-hunter`。装好后**实时检测、无需重启**（若你机器此前从未有过 `~/.claude/skills/` 目录，首次需重启 Claude Code 一次）。
+
+### 方式 A · 克隆到技能目录（最稳，推荐）
 
 ```bash
-# 全局
-git clone https://github.com/naisi-alibaba/hk-warrant-hunter ~/.claude/skills/hk-warrant-hunter
-# 或项目内
-git clone https://github.com/naisi-alibaba/hk-warrant-hunter <your-project>/.claude/skills/hk-warrant-hunter
+# 个人 / 全局（所有项目可用）
+git clone https://github.com/naisi-alibaba/longbridge-warrant-hunter.git ~/.claude/skills/longbridge-warrant-hunter
+
+# 或仅当前项目
+git clone https://github.com/naisi-alibaba/longbridge-warrant-hunter.git .claude/skills/longbridge-warrant-hunter
 ```
+
+### 方式 B · 插件市场一键装
+
+在 Claude Code 里：
+
+```text
+/plugin marketplace add naisi-alibaba/longbridge-warrant-hunter
+/plugin install longbridge-warrant-hunter@longbridge-warrant-hunter
+/reload-plugins
+```
+
+之后以 `/longbridge-warrant-hunter` 调用（依赖本仓库的 `.claude-plugin/marketplace.json`）。
+
+### 方式 C · 只取文件、不带 git 历史
+
+```bash
+npx degit naisi-alibaba/longbridge-warrant-hunter ~/.claude/skills/longbridge-warrant-hunter
+```
+
+装好后用 `/longbridge-warrant-hunter` 触发，或直接描述需求让 Claude 按 `description` 自动调用。
 
 ## 🔌 前置依赖
 

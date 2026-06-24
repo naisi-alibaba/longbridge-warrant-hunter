@@ -1,5 +1,5 @@
 ---
-name: hk-warrant-hunter
+name: longbridge-warrant-hunter
 description: 港股权证（窝轮/牛熊证 CBBC）盈亏比猎手，多空双向。基于 Longbridge OpenAPI MCP 的全市场行情与资金数据，按固定工作流：盲扫锁异常 → 鱼身定位（头/中/尾） → 资金结构验证 → 筛权证 → 量化盈亏比×持仓周期 → 盘口确认 → 出行动盘。当用户想在港股市场寻找盈亏比高的认购/认沽权证、或对某个标的做权证择时与选轮时使用。需连接 Longbridge OpenAPI MCP（提供行情、资金流、权证链、盘口、下单等工具）。本技能仅为研究分析工具，非投资建议；权证为高杠杆品种，请用模拟盘验证。
 ---
 

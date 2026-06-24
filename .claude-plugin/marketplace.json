@@ -1,0 +1,12 @@
+{
+  "name": "longbridge-warrant-hunter",
+  "owner": { "name": "naisi-alibaba" },
+  "plugins": [
+    {
+      "name": "longbridge-warrant-hunter",
+      "source": "./",
+      "description": "港股权证(窝轮/牛熊证)盈亏比猎手 · 多空双向 · 基于 Longbridge OpenAPI MCP",
+      "strict": false
+    }
+  ]
+}
