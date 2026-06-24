@@ -1,5 +1,7 @@
 # Longbridge Warrant Hunter · 港股权证盈亏比猎手
 
+**🌐 中文（当前） · [English](README.en.md)**
+
 > A Claude **Agent Skill** that hunts high risk-reward Hong Kong warrants (窝轮) and CBBCs (牛熊证), long & short, on top of the **Longbridge OpenAPI MCP**. Direction-first, evidence-driven — not a news summarizer.
 
 一个基于 **Longbridge OpenAPI MCP** 的 Claude 技能：在港股权证（窝轮 + 牛熊证）里**多空双向**找盈亏比高的机会。核心是一套可证伪的判据——**先定方向，再选结构**。
@@ -68,6 +70,10 @@ npx degit naisi-alibaba/longbridge-warrant-hunter ~/.claude/skills/longbridge-wa
 - "现在做认购还是认沽，挂哪只轮，止损止盈怎么定"
 
 技能会读 `reference/framework.md`（判据）+ `reference/workflow.md`（步骤）执行。
+
+## 📁 示例
+
+- [2026-06-24 · 半导体领涨 + CXO 轮动](examples/2026-06-24-semis-cxo.md) — 一次完整跑动，含进场与**诚实的浮动盈亏**（模拟盘，约打平——而这个"打平"本身就是教学点）。
 
 ## 🧭 不可违背的铁律
 
