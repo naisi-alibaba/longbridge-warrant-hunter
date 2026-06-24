@@ -1,0 +1,18 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Secrets — never commit Longbridge credentials
+.env
+.env.*
+*.key
+*.pem
+config.local.*
+
+# Local runtime / paper-trading logs (keep your positions private)
+*.local.md
+/runs/
+/logs/

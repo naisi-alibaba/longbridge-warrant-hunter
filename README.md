@@ -1,0 +1,65 @@
+# HK Warrant Hunter · 港股权证盈亏比猎手
+
+> A Claude **Agent Skill** that hunts high risk-reward Hong Kong warrants (窝轮) and CBBCs (牛熊证), long & short, on top of the **Longbridge OpenAPI MCP**. Direction-first, evidence-driven — not a news summarizer.
+
+一个基于 **Longbridge OpenAPI MCP** 的 Claude 技能：在港股权证（窝轮 + 牛熊证）里**多空双向**找盈亏比高的机会。核心是一套可证伪的判据——**先定方向，再选结构**。
+
+---
+
+## ✨ 它做什么
+
+按固定工作流跑：
+
+```
+盲扫全市场锁异常 → 双向鱼身定位(头/中/尾) → 资金结构验证(防错杀)
+   → 筛权证(IV/杠杆/到期/街货/价差两道闸) → 量化盈亏比×持仓周期
+   → 盘口确认 → 出「行动盘」(标的×鱼段×工具×盈亏比×周期×触发×止损×仓位)
+```
+
+**核心思想（鱼身定位）**：只重仓"鱼中段"（确认后的趋势中段）、轻仓"鱼头"（刚起涨/起跌）、绝不碰"鱼尾"（抛物线顶/瀑布底）。**双向对称**——对一只已跌很多的票买认沽，等同于追抛物线顶买认购，是同一个错。鱼尾按**资金结构翻转 + 速度**判，**绝不按涨跌幅枪毙**。
+
+## 📦 安装
+
+这是标准 Agent Skill（`SKILL.md` + `reference/`）。放到 Claude 能加载技能的目录即可，例如：
+
+```bash
+# 全局
+git clone https://github.com/naisi-alibaba/hk-warrant-hunter ~/.claude/skills/hk-warrant-hunter
+# 或项目内
+git clone https://github.com/naisi-alibaba/hk-warrant-hunter <your-project>/.claude/skills/hk-warrant-hunter
+```
+
+## 🔌 前置依赖
+
+- **Claude Code / 支持 Agent Skills 的 Claude 客户端**
+- **Longbridge OpenAPI MCP**（数据来源唯一，必须连接）——提供行情、市场温度、行业排名、资金流/资金分布、权证链、盘口、（可选）下单与到价提醒等工具。
+  - 申请 Longbridge OpenAPI 凭证并配置 MCP：参见 Longbridge 官方文档。
+  - 工具名以你的 MCP 配置为准（可能带前缀）。
+
+## 🚀 用法
+
+在对话里触发（或按你客户端的技能调用方式）：
+
+- "港股有没有盈亏比好的认购/认沽权证" → 全市场盲扫双向
+- "帮我在 中芯国际 上选只窝轮/牛熊证" → 单标的鱼身定位 + 选轮
+- "现在做认购还是认沽，挂哪只轮，止损止盈怎么定"
+
+技能会读 `reference/framework.md`（判据）+ `reference/workflow.md`（步骤）执行。
+
+## 🧭 不可违背的铁律
+
+- 鱼尾按**结构翻转 + 抛物线速度**判，**绝不按涨跌幅**；对"看起来涨/跌多"的票必须拉资金结构再裁。**错杀 = 框架有洞。**
+- **主力是参考不是裁决**：资金只确认/证伪方向，强信号也带止损。
+- **两道独立闸**：股票鱼身 ∩ 权证经济性（IV 非极值 / 到期≥3月 / 街货<50% / 价差可接受）。
+- **已确认即动，犹豫放离场端**；认沽止损更紧、仓位更小。
+- **矩阵决定输出**，不凑认购/认沽对称。
+
+## ⚠️ 免责声明 / Disclaimer
+
+本技能仅为基于公开行情的**研究分析工具，不构成任何投资建议**。港股权证、牛熊证为**高杠杆、可归零、可被强制收回**的衍生品，风险极高。任何依据本技能输出做出的交易决策，盈亏与后果由使用者自负。**强烈建议先用模拟盘（paper trading）验证框架，再考虑实盘。** 作者与贡献者不对任何损失负责。
+
+This skill is a research/analysis tool only and is **not investment advice**. HK warrants and CBBCs are high-leverage instruments that can go to zero or be mandatorily called. Use a paper account first. The authors accept no liability for any losses.
+
+## 📄 License
+
+MIT — see [LICENSE](LICENSE).
