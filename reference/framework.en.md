@@ -3,6 +3,8 @@
 > **🌐 [中文](framework.md) · English**
 >
 > Long & short. This file is the "how to think"; for the steps see `workflow.en.md`. All data comes from the Longbridge OpenAPI MCP.
+>
+> **Version v3 (2026-06-26)** · changes in [`../CHANGELOG.md`](../CHANGELOG.md). This release adds L5 "exit-side structure re-screen" and L8 "stop sized by leverage".
 
 ## L0 Core
 A warrant has no standalone value — **risk-reward is synthesized**. With no directional view, expected value is negative (time decay + bid-ask spread are guaranteed outflows).
@@ -41,6 +43,7 @@ Main path: **set direction → fish-positioning → money confirmation → pick 
 - **Wait only when unconfirmed; act once confirmed** (breakout/breakdown + aligned same-day money structure = enough to enter, no second confirmation needed).
 - **Put the hesitation on the exit side, not the entry side.** "Don't chase" ≠ "wait for a cheaper price" — it = enter now · right size · add on proof · use a limit, don't sweep the spike · don't go all-in on a one-day move.
 - **Following smart money means following it IN and OUT**; conviction is rented from the flow → the moment structure flips, leave.
+- **Exit-side structure re-screen (same ruler as entry)**: while holding, keep re-screening with **the same money-structure ruler you used to enter**. A reverse structure flip (call: large money net-in → net-out + retail net-out → net-in; puts mirror) = a **first-class exit signal — cut/close that day**, and must NOT be downgraded to "watch and hold" just because price hasn't hit a far-away price stop. **Enter on structure, exit on structure too**; the price stop is only a backstop when the structure ruler fails, not the primary exit line. Execute **whichever of this or the L8 leverage-sized stop triggers first**.
 
 ## L6 Execution asymmetry between the two sides
 Direction is symmetric, execution is not: **puts get tighter stops and smaller size** (downside bounces and short squeezes are more violent than upmoves).
@@ -55,6 +58,7 @@ IV (compare across warrants on the same underlying; avoid sector extremes) · ef
 - CBBCs: no theta/IV but a mandatory call — the **call price must sit beyond your stop**.
 - Instrument by fish-segment: head → OTM loss-capped; mid-body → ATM warrant / CBBC.
 - Instrument by horizon: short hold → CBBC / ITM (low theta); swing → ATM/OTM (convexity); longer → discount theta, slow direction → CBBC.
+- **Size the stop by leverage — do NOT copy the stock's technical level.** A warrant stop ≠ the stock's technical-failure level (neckline / platform / round number). Reverse the order: first set the **bearable warrant drawdown** (e.g. −10~12%) → ÷ effective leverage = the underlying's tolerance → add to entry to get the underlying stop. Copying the stock level lets leverage multiply the stop several-fold (e.g. underlying −8% × 3x ≈ warrant −24%, breaking L1 "leave at the stop, don't hold to zero"). For CBBCs additionally: the leverage-sized stop must sit **well before the mandatory call price**.
 
 ## L9 Data realities (Longbridge MCP)
 - No direct warrant theta (estimate from IV + expiry);

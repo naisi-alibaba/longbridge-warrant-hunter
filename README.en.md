@@ -4,6 +4,8 @@
 
 > A Claude **Agent Skill** that hunts high risk-reward Hong Kong warrants (窝轮) and CBBCs (牛熊证), long & short, on top of the **Longbridge OpenAPI MCP**. Direction-first, evidence-driven — not a news summarizer.
 
+> 📌 **Current version v3 (2026-06-26)** — adds "exit-side structure re-screen" + "stop sized by leverage". See [`CHANGELOG.md`](CHANGELOG.md) for the version diff and methodology evolution.
+
 ---
 
 ## ✨ What it does
@@ -71,7 +73,7 @@ The skill reads `reference/framework.{md|en.md}` (criteria) + `reference/workflo
 
 ## 📁 Example
 
-- [2026-06-24 · Semis lead + CXO rotation](examples/2026-06-24-semis-cxo.md) — a full run with entries and **honest unrealized P&L** (paper, ~flat — and why that flatness is the lesson).
+- [2026-06-24 · Semis lead + CXO rotation](examples/2026-06-24-semis-cxo.md) — a full run: a compliant entry that still bled into a loss; **section 5 "Exit post-mortem" is the live teaching case for the v3 exit discipline** (the cost of entering on structure but exiting on price).
 
 ## 🧭 Iron rules
 
