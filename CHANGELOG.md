@@ -5,6 +5,29 @@
 
 ---
 
+## v3.1 — 2026-06-29 · 结构监控落地（Structure monitoring operationalized）
+
+**触发 / Trigger**：不是判断被反转，而是 v3 留下的执行洞——v3 说「结构翻转就离场」，但**价格能用原生预警 push，结构（大单/capital_flow）长桥无 push、大单无历史**，手判会漂移、会迟到（06-26 中芯即如此）。本版把 v3 的判断**落成可执行的轮询 + 机器判据**。
+Not a reversed call — an execution gap left by v3. v3 said "flip in structure = exit", but price has a native push alert while structure has none on Longbridge (large-money also has no history); hand-judgment drifts and lags (the 06-26 SMIC case). This release turns v3's judgment into an executable poll + machine criterion.
+
+**方法论更新 / What changed**
+
+1. **双轨监控 / two-track monitoring**：① 持仓结构轮询（每 30 分钟，只看持仓，逐腿跑翻转检测器 + 价格 vs 止损止盈）；② 全局找新标的（每日 3 档，盲扫双向 + 临近收盘 CLV 定案）。结构监控**只能主动轮询**——这是数据现实，不是选择。
+   Two tracks: (1) position structure poll every 30 min (holdings only, run the flip detector + price-vs-stop/target per leg); (2) global new-target scan 3× daily. Structure can **only** be polled actively — a data reality, not a choice.
+
+2. **结构翻转检测器 / structure-flip detector**（机器判据，配 CLV 自我分位检测器）：大单净额方向 + `capital_flow` 斜率/回撤双证。`capital_flow` 斜率是唯一能**先于价格**翻的实时量（累计净流入见顶回落 = flow 恶化）。**翻转确认 = 大单方向翻转 ∩ flow 恶化 → 当日减/平**；单证 = 预警。大单/散户**仅当天、无历史、不可回测** → live 用；CLV（OHLCV 派生）可回测——一快一慢、互补。
+   A machine criterion (pairs with the CLV self-percentile detector): large-money direction + `capital_flow` slope/drawdown, two proofs. The slope is the only real-time quantity that flips **before price**. Confirmed flip = large-money direction flip ∩ flow deterioration → cut that day; one proof = warning. Large/retail is same-day, no history, not backtestable (live only); CLV is backtestable — fast vs slow, complementary.
+
+3. **进场扳机澄清 / entry-trigger clarification**：**CLV 收盘定案永不作进场扳机**（呼应 L5/R7）；进场扳机 = 价格 + 当日大单/capital_flow 实时方向，CLV 盘中只软佐证、不阻塞。把「价格+实时资金已确认」误降级成「CLV 类·收盘定案·盘中不开仓」= 过度保守。
+   A CLV close-mark is **never** an entry trigger (per L5/R7); the trigger is price + same-day large-money/capital_flow, intraday CLV only soft support. Downgrading a confirmed price+money entry into "CLV-class, settle at close, no intraday open" = over-conservative.
+
+**与 v3 的关系 / Relation to v3**：v3 是扳机（该卖时卖），v3.1 是探照灯（及时看见该卖的信号）。无判断被反转 → **点版本（.1），非升大版**。
+v3 is the trigger (sell when you should); v3.1 is the searchlight (see the signal in time). No call was reversed → a **point release (.1)**, not a major bump.
+
+**实战 / Worked example**：[`examples/2026-06-29-meltup-structure-poll.md`](examples/2026-06-29-meltup-structure-poll.md) — melt-up 全日，结构轮询 ~12 次零翻转，药明减半 +855 / 累计实现 −2,620。
+
+---
+
 ## v3 — 2026-06-26 · 离场纪律（Exit discipline）
 
 **触发 / Trigger**：模拟盘中芯三腿。进场完全合规（06-24 大单 +26 亿吸筹、突破中段），却仍从 +7.64% 回吐成浮亏——根因不在进场、在离场。详见 [`examples/2026-06-24-semis-cxo.md`](examples/2026-06-24-semis-cxo.md) 第五节。

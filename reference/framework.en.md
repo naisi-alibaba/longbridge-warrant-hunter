@@ -65,3 +65,4 @@ IV (compare across warrants on the same underlying; avoid sector extremes) · ef
 - Candlestick timestamps may be offset by +1 day (to read a day's close, take the bar stamped the previous calendar day; cross-check with prev_close);
 - Warrants only exist on liquid mid/large caps (penny-stock anomalies are irrelevant);
 - **Some names have no warrants → not executable = dropped.**
+- **Price has a native push alert; structure (`capital_distribution` large/retail + `capital_flow`) has none, and large-money is same-day with no history** → position structure monitoring can **only** be polled actively (e.g. every 30 min), using a machine criterion (large-money direction flip ∩ `capital_flow` slope/drawdown deterioration) to catch a flip; the `capital_flow` slope is the only real-time quantity that flips **before price**. CLV (OHLCV-derived) is backtestable, structure is not — complementary (see CHANGELOG v3.1).
