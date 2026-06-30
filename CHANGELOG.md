@@ -26,6 +26,9 @@ v3 is the trigger (sell when you should); v3.1 is the searchlight (see the signa
 
 **实战 / Worked example**：[`examples/2026-06-29-meltup-structure-poll.md`](examples/2026-06-29-meltup-structure-poll.md) — melt-up 全日，结构轮询 ~12 次零翻转，药明减半 +855 / 累计实现 −2,620。
 
+**首次 live 验证（双向都对）/ first live validation (both directions)**：[`examples/2026-06-30-structure-poll-live.md`](examples/2026-06-30-structure-poll-live.md) — 阿里双证翻转确认 → 先于价格止损离场(−8.2% vs 等价格约−12~15%)；中芯午后回撤大单仍吸筹 → 判"持有"未误杀、收回成本；药明单证连续3轮不升级 → 不动。该走时走、该忍时忍、噪声不乱动。
+First live validation (both directions): BABA two-proof confirmed flip → exit ahead of the price stop (−8.2% vs ~−12~15% waiting for price); SMIC afternoon pullback with large money still accumulating → "HOLD", no false-kill, recovered to cost; WuXi one-proof warnings ×3 didn't escalate → no action.
+
 ---
 
 ## v3 — 2026-06-26 · 离场纪律（Exit discipline）
