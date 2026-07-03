@@ -73,6 +73,7 @@ The skill reads `reference/framework.{md|en.md}` (criteria) + `reference/workflo
 
 ## 📁 Example
 
+- [📒 **Paper-trading ledger (2026-06-17 → 07-02)**](examples/2026-paper-trading-ledger.md) — **one table for "action · rationale · cognitive iteration · P&L"**: the full trajectory, cumulative realized −HK$4,145, showing how each loss "bought" a framework version (v1→v3.1). ⚠️ Paper-account demo, not a track record.
 - [2026-06-24 · Semis lead + CXO rotation](examples/2026-06-24-semis-cxo.md) — a full run: a compliant entry that still bled into a loss; **section 5 "Exit post-mortem" is the live teaching case for the v3 exit discipline** (the cost of entering on structure but exiting on price).
 
 ## 🧭 Iron rules

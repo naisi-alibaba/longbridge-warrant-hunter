@@ -75,6 +75,7 @@ npx degit naisi-alibaba/longbridge-warrant-hunter ~/.claude/skills/longbridge-wa
 
 ## 📁 示例
 
+- [📒 **模拟盘收益台账（2026-06-17 → 07-02）**](examples/2026-paper-trading-ledger.md) — **一张表看清「动作 · 决策理由 · 认知迭代 · 收益」**：完整轨迹、累计已实现 −4,145 HKD，讲清每笔亏损如何"买"来一版框架（v1→v3.1）。⚠️ 模拟盘演示，非业绩承诺。
 - [2026-06-24 · 半导体领涨 + CXO 轮动](examples/2026-06-24-semis-cxo.md) — 一次完整跑动：进场合规却仍浮亏，**第五节「离场复盘」是 v3 离场纪律的活教材**（进场用结构尺、离场误用价格尺的代价）。
 
 ## 🧭 不可违背的铁律
