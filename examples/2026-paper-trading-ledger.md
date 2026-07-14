@@ -74,8 +74,8 @@
 
 - **小米14225（+3,000 附近的最大单回合，持 3d4h）**——本时代最大单回合盈利。07-10 吸筹进场、结构一直站住，鱼身兑现。全期 5 回合累计 +3,400，是把整段拉回来的主力。
 - **中兴13599（3 回合累计 +1,560，持约 1d7h）**——吸筹进场、拿住到位；本时代最稳的一档。
-- **快手27786（合计 −3,045，含单回合约 −20%、−32%）**——反复以"吸筹/普涨"进场却持续失血，本时代最大亏损源。**规模化把一个偏差信号的代价放大了。**
-- **药明22574（−2,237.50）**——07-13 结构翻转该走，**平仓卖单被券商拒单**（挂 0.088 未成交），没走成、拖到更深。这就是下面 §3 的"想平却平不掉"。
+- **快手27786（合计 −3,045，含单回合约 −20%、−32%）**——反复以"吸筹/普涨"进场却持续失血，本时代最大亏损源。更关键的是 **2026-07-13 15:58 HKT 结构尺已判「翻转确认」、发出平仓单（卖 140,000@0.073），却挂到收盘过期未成交**——该走没走成，仓位拖到隔日继续亏。**规模化把一个偏差信号的代价放大，执行层再没兜住。**
+- **药明22574（−2,237.50）**——**2026-07-13 11:04 HKT 触发止损、发出平仓单（卖 87,500@0.088）被券商拒单**，只能在更低价补平，亏损里含这段被拒后的滑价。同属下面 §3 的"想平却平不掉"。
 
 ---
 
@@ -93,6 +93,17 @@
 **守护进程时代：两条"规模化才暴露"的运维账**
 
 - **① 想平却平不掉【自动化独有的执行层风险】** — 本时代 **10 笔平仓卖单失败**（拒单 / 限价挂到收盘未成交）：快手27786、药明22574、美团26790、阿里14461 都出现"结构尺喊走、单子没成交、仓位卡住"。人手点单会立刻改价重挂，自动系统却可能一路挂到收盘。**结构判对了，执行层没兜住，照样多亏。**（executor 已加失败回滚+冷却重挂，但这是本时代最该补的下一课。）
+
+  **关键失败平仓单实录（想平没平掉）**——两大亏损标的的失血，很大一块正来自这里：
+
+  | 时间（HKT） | 标的 | 平仓触发 | 卖单 | 券商结果 | 后果 |
+  |---|---|---|---|---|---|
+  | 2026-07-13 15:58 | 快手27786 | **结构翻转确认** | 卖 140,000@0.073 | 过期未成交 | 结构尺已判该走，单子挂到收盘没成交，仓位拖到隔日继续失血 |
+  | 2026-07-07 09:15 | 快手27786 | 止损 | 卖 65,000@0.098 | 过期未成交 | 止损没执行成，回合亏损扩大 |
+  | 2026-07-13 11:04 | 药明22574 | 止损 | 卖 87,500@0.088 | 拒单 | 被拒后才在更低价补平，−2,237.50 里含这段滑价 |
+
+  > 快手 −3,045、药明 −2,237.50 这两个本时代最大亏损，**不是判据看错方向，而是"判对了却卖不出去"**——结构翻转/止损信号都发了，卖单却被拒或挂到收盘过期。这类账在手动时代看不见（人手会立刻改价重下），只有自动化 7×24 才暴露。
+
 - **② 度量本身要对账【台账不可直接当业绩】** — 本地台账逐行盈亏记的是**提交限价**、还夹着重复/空行，与真实成交价回算的结果对不上。本时代因此把盈亏统一改用 **`reconcile_pnl.js` 按 SDK 真实成交回算**：**面板/台账只能当底稿，公开的收益数字必须用真实成交价重算。**
 
 > **一句话认知（跨两个时代）**：手动时代证明了"离场纪律 > 进场功课"；守护进程时代补上后半句——**当你把纪律交给机器 7×24 执行，胜负手从"判断对不对"又多了一层："单子平不平得掉"。** 14 个标的 6 盈 6 亏 2 平，靠小米/中兴几个大回合把整段压到 −1,592.50，却仍被卡单拖着走不干净。**规模化不改判据的对错，只放大判据之外的每一个漏洞。**
@@ -204,8 +215,8 @@
 
 - **Xiaomi 14225 (the era's biggest single winning round, held 3d4h)** — entered accumulating 07-10, structure held, fish-body paid. Its 5 rounds total +3,400 — the main force pulling the era back.
 - **ZTE 13599 (3 rounds total +1,560, ~1d7h)** — accumulating entry, held to target; the era's steadiest name.
-- **Kuaishou 27786 (−3,045 total, incl. single rounds around −20% and −32%)** — repeatedly entered "accumulating/broad-rally" yet kept bleeding; the era's biggest loss source. **Scale amplified the cost of one biased signal.**
-- **WuXi 22574 (−2,237.50)** — 07-13 structure flipped and it should've been cut, but **the exit sell order was rejected** by the broker (0.088 unfilled), so it stayed on and bled deeper. This is the "want-to-exit-but-can't" of §3.
+- **Kuaishou 27786 (−3,045 total, incl. single rounds around −20% and −32%)** — repeatedly entered "accumulating/broad-rally" yet kept bleeding; the era's biggest loss source. More telling: **on 2026-07-13 15:58 HKT the structure ruler had already confirmed the flip and fired the exit (sell 140,000@0.073), but it sat unfilled to the close** — the exit never happened and the position dragged into the next day. **Scale amplified a biased signal, and the execution layer failed to catch it.**
+- **WuXi 22574 (−2,237.50)** — **on 2026-07-13 11:04 HKT a stop-loss exit fired (sell 87,500@0.088) but the broker rejected it**, so it had to be re-filled lower; part of the loss is that post-rejection slippage. Also the "want-to-exit-but-can't" of §3.
 
 ---
 
@@ -223,6 +234,17 @@
 **Daemon era: two "only-at-scale" ops accounts**
 
 - **① Want-to-exit-but-can't [an execution-layer risk unique to automation]** — **10 exit sell orders failed** this era (rejected / limit unfilled to close): Kuaishou 27786, WuXi 22574, Meituan 26790, BABA 14461 all hit "the ruler says exit, the order never fills, the position stays stuck." A human would instantly re-price and re-submit; an automated system may sit on the limit to the close. **The judgment was right; the execution layer didn't catch it, and it lost anyway.** (The executor now rolls back on failure + re-submits after cooldown — but this is the era's clearest next lesson.)
+
+  **Record of the key failed exits (wanted out, couldn't get out)** — much of the two biggest losers' bleed comes from exactly here:
+
+  | Time (HKT) | Name | Exit trigger | Sell order | Broker result | Consequence |
+  |---|---|---|---|---|---|
+  | 2026-07-13 15:58 | Kuaishou 27786 | **confirmed flip** | sell 140,000@0.073 | expired unfilled | ruler had said exit; order sat to the close unfilled, position dragged into next day |
+  | 2026-07-07 09:15 | Kuaishou 27786 | stop-loss | sell 65,000@0.098 | expired unfilled | stop never executed, the round's loss widened |
+  | 2026-07-13 11:04 | WuXi 22574 | stop-loss | sell 87,500@0.088 | rejected | re-filled lower after the reject; the −2,237.50 includes this slippage |
+
+  > Kuaishou −3,045 and WuXi −2,237.50, the era's two biggest losses, **weren't the criteria pointing the wrong way — they were "right call, couldn't sell."** The flip/stop signals both fired, but the sell orders were rejected or expired at the close. This account is invisible in the hand era (a human instantly re-prices and re-submits); only 7×24 automation exposes it.
+
 - **② Measurement itself must be reconciled [the ledger isn't a track record]** — the local ledger's per-row P&L uses **submit-limit prices** (with duplicate/blank rows) and doesn't match a recompute from real fills. So this era standardized P&L on **`reconcile_pnl.js`, recomputed from SDK real fills**: **the panel/ledger is only a source; any published number must be recomputed from real fill prices.**
 
 > **One-line takeaway (across both eras)**: the hand era proved "exit discipline > entry homework"; the daemon era added the back half — **once you hand the discipline to a machine running 7×24, the deciding factors grow by one more layer beyond "is the call right": "can you actually close the order."** Across 14 names 6 win / 6 loss / 2 flat, a few big Xiaomi/ZTE rounds held the era to −1,592.50, yet stuck orders still kept it from a clean exit. **Scale doesn't change whether the criteria are right — it magnifies every hole outside the criteria.**
