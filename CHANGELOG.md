@@ -5,6 +5,37 @@
 
 ---
 
+## v5 — 2026-08-12 · 多维证据与决策卫生（Multi-evidence & decision hygiene）
+
+**触发 / Trigger**：一套只靠"资金结构 + CLV"两样东西定方向的判据，在实盘里暴露三个洞——① CLV 经回测是**弱均值回归**（高 CLV 次日倾向反跌），却被当成"顺势/吸筹脚印"用作进场理由，方向是反的；② 亏损的最大类别不是"做反向"，是"中性/无正向证据也放行"；③ 价、量、净额全是主力最能构造给你看的东西，识庄信息一维没进。
+A criteria set that fixed direction on just "money structure + CLV" exposed three holes live: ① CLV is empirically **weak mean-reversion** (high CLV tends to fall back next day) yet was used as a trend/accumulation reason for entry — backwards; ② the biggest loss class was not "trading a reversal" but "letting neutral / no-positive-evidence through"; ③ price/volume/net-flow are all the easiest things for an operator to construct, and no operator-identifying dimension was in the framework.
+
+**方法论更新 / What changed**
+
+1. **CLV 实证降级（改写 L4）/ CLV demoted (L4 rewrite)**：以每股自身分位为尺，高 CLV t+1 信息系数 ≈ −0.03（弱反转、扣成本不可交易）。**CLV 永不作进场扳机**，唯一角色在离场端（收盘跌破自身低分位=结构走弱软佐证）。
+   With each stock's own percentile as ruler, high CLV's t+1 IC ≈ −0.03 (weak reversal, uncradeable after cost). CLV is never an entry trigger; its only role is exit-side.
+
+2. **进场三维证据投票（新增 L9）/ three-dimension entry vote (new L9)**：进场从"没有反向就进"升级为"必须有足够正向证据"——结构维（capital_distribution）/ 资金流维（capital_flow）/ 逐笔主动买维（trades）三态平权投票，≥2 维正向才进，**中性=不进**。投票只裁准入、不裁方向。
+   Entry upgraded from "no reversal = enter" to "requires positive evidence": a three-dim equal vote (structure / flow / tape), ≥2 positive to enter, neutral = no entry. The vote decides admission, not direction.
+
+3. **抗操纵两维 + 鱼身去神圣化（新增 L10）/ anti-manipulation + de-sanctified fish-body (new L10)**：标准鱼身=主力诱多教科书；补两维最难伪造的原料——逐笔主动方向序列（trades，连续同向=扫单/交替=对敲）+ CCASS 全席位集中度/增减（broker_holding_detail，T+1）。两者均不受行情档次限制。
+   A standard fish-body = the textbook bull-trap; add two hardest-to-fake ingredients — tick active-direction sequence + CCASS full-participant concentration/changes. Neither is quote-tier limited.
+
+4. **对抗式独立盲审（新增 L11）/ adversarial blind review (new L11)**：抗操纵做成独立第二趟"魔鬼代言人"——盲（看不到看多理由）、按方向红旗清单、克制（默认放行，多红旗+硬证据才判疑似）。技术主线与抗操纵审查解耦。
+   Anti-manipulation as an independent second "devil's advocate" pass — blind, direction-grouped red flags, restrained (default pass). Technical line and anti-manipulation review decoupled.
+
+5. **结论使用纪律（新增 L12）/ conclusion-usage discipline (new L12)**：对抗复核≠独立证据；不可回测=可信度天花板；"已定论"都隐含"仅在当前市场环境内"；小样本只论机制不论收益；口径三问；归一化分母不取自被判定量本身。
+   Adversarial re-check ≠ independent evidence; not-backtestable = a confidence ceiling; every conclusion implies "current regime only"; small sample → mechanism not returns; the three metric questions; a normalization denominator must not come from the judged quantity.
+
+6. **L3 补抛物线速度量化 / L3 parabolic velocity quantified**：涨幅自我分位≥90 + 日收益 z≥2 + ROC 加速度三量共振，★用分位不用绝对幅度（绝对幅度错杀强势股）。
+
+7. **工作流全面改写为严格编号步骤 / workflow fully rewritten as strict numbered steps**：步骤 0-9，每步七字段（目的/前置条件/调用/判据IF-THEN/GATE否决点/输出/失败处理），每个数据维指名 MCP 工具 + 字段，去除全部口语化表述。README 新增「可调参数」专区（所有 ☆ 阈值集中列出、可覆写）。
+
+**与 v4 的关系 / Relation to v4**：v4 修选券（进场端选哪只轮），v5 修**方向证据质量 + 识庄 + 决策卫生**（该不该进、信不信自己的判据）。判断被真实数据反转（"CLV 当顺势脚印"被证伪）→ **升大版 v5**。框架 L 编号由 L0-L9 扩为 L0-L13（数据现实从 L9 移到 L13）。
+v4 fixed selection (which warrant); v5 fixes **directional-evidence quality + operator-identification + decision hygiene** (whether to enter, whether to trust your own criteria). A call reversed by real data ("CLV as a trend footprint" falsified) → **major bump to v5**. Framework numbering expands from L0-L9 to L0-L13 (data realities moved from L9 to L13).
+
+---
+
 ## v4 — 2026-08-12 · 选券质量（Selection quality）
 
 **触发 / Trigger**：同一天、同一个方向判断（看空快手 1024.HK），两条独立跑的决策链都定案"做空快手认沽"，方向都对、正股也确实在跌——却交出天差地别的结果：一条选了深度价内证（+10.3%），另一条选了深度价外证（几乎打平）。根因不在方向、不在流动性，而在**选券**（选哪只轮）——本框架此前最没展开的一环。
