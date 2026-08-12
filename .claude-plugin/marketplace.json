@@ -5,7 +5,7 @@
     {
       "name": "longbridge-warrant-hunter",
       "source": "./",
-      "description": "港股权证(窝轮/牛熊证)盈亏比猎手 · 多空双向 · 基于 Longbridge OpenAPI MCP",
+      "description": "港股窝轮(认购/认沽)盈亏比猎手 · 多空双向 · 只做窝轮不做牛熊证 · 基于 Longbridge OpenAPI MCP",
       "strict": false
     }
   ]

@@ -4,7 +4,7 @@
 >
 > Long & short. This file is the "how to think"; for the steps see `workflow.en.md`. All data comes from the Longbridge OpenAPI MCP.
 >
-> **Version v3 (2026-06-26)** · changes in [`../CHANGELOG.md`](../CHANGELOG.md). This release adds L5 "exit-side structure re-screen" and L8 "stop sized by leverage".
+> **Version v4 (2026-08-12)** · changes in [`../CHANGELOG.md`](../CHANGELOG.md). This release narrows to **plain warrants (calls/puts) only and drops CBBCs**, and adds L1 "lottery leverage" + L8 "the three selection questions" — *which* warrant you pick was this framework's weakest link.
 
 ## L0 Core
 A warrant has no standalone value — **risk-reward is synthesized**. With no directional view, expected value is negative (time decay + bid-ask spread are guaranteed outflows).
@@ -15,6 +15,7 @@ Main path: **set direction → fish-positioning → money confirmation → pick 
 - **Leverage scales both gain and loss equally — it does NOT improve the R:R ratio.**
 - Asymmetry comes from three things: ① convexity (gamma — strongest ATM/OTM); ② the target-vs-stop distance ratio on the underlying; ③ a strictly honored stop.
 - Every R:R number assumes: **you leave at the stop, you do not hold to zero.**
+- **⚠ "Highest effective leverage" is the most expensive trap in selection.** The "effective leverage" the API reports is an instantaneous theoretical figure; a deep-OTM warrant has a tiny price denominator that inflates it into a false high — a "lottery leverage" that only pays off if the underlying moves violently. When the direction is right but the underlying moves only a little, that OTM leverage never materializes and theta + spread bleed it instead. **Never pick a warrant by "biggest leverage"** — a high leverage number must be read together with moneyness + delta (see L8).
 
 ## L2 Fish-positioning (the organizing ruler, symmetric both ways)
 
@@ -26,8 +27,10 @@ Main path: **set direction → fish-positioning → money confirmation → pick 
 | Distance from history | irrelevant | irrelevant | irrelevant |
 
 - **Head** = a fresh turn · small size · loss-capped instrument (OTM warrant);
-- **Mid-body** = confirmed · core size · efficient instrument (ATM warrant / CBBC);
+- **Mid-body** = confirmed · core size · efficient instrument (ATM / ITM warrant);
 - **Tail** = an absolute veto.
+
+> **This framework trades plain warrants (calls/puts) only — no CBBCs.** CBBCs carry a mandatory-call mechanism: touch the call price and they knock out to zero instantly and uncontrollably — a different risk nature from warrants, so they are excluded wholesale. All instrument choices below are made only among ITM/ATM/OTM plain warrants.
 
 ## L3 Tail criterion: structure + velocity, not magnitude
 - "Fell too much" for a put = "rose too much" for a call = **the same most-expensive instinct**. A downtrend makes fresh relative lows by definition — that is exactly what it is supposed to do.
@@ -55,10 +58,14 @@ Direction is symmetric, execution is not: **puts get tighter stops and smaller s
 
 ## L8 Warrant economics criteria (the second gate)
 IV (compare across warrants on the same underlying; avoid sector extremes) · effective leverage · premium/breakeven · moneyness + delta (ITM = higher hit-rate / OTM = higher convexity) · **expiry ≥3 months** (avoid the theta cliff) · street-ratio <50% · issuer spread · conversion ratio.
-- CBBCs: no theta/IV but a mandatory call — the **call price must sit beyond your stop**.
-- Instrument by fish-segment: head → OTM loss-capped; mid-body → ATM warrant / CBBC.
-- Instrument by horizon: short hold → CBBC / ITM (low theta); swing → ATM/OTM (convexity); longer → discount theta, slow direction → CBBC.
-- **Size the stop by leverage — do NOT copy the stock's technical level.** A warrant stop ≠ the stock's technical-failure level (neckline / platform / round number). Reverse the order: first set the **bearable warrant drawdown** (e.g. −10~12%) → ÷ effective leverage = the underlying's tolerance → add to entry to get the underlying stop. Copying the stock level lets leverage multiply the stop several-fold (e.g. underlying −8% × 3x ≈ warrant −24%, breaking L1 "leave at the stop, don't hold to zero"). For CBBCs additionally: the leverage-sized stop must sit **well before the mandatory call price**.
+
+- **The three selection questions (how to pick among several candidate warrants on the same name — don't just look at leverage)**:
+  1. **How far ITM/OTM?** Deep OTM (say beyond −25%) = needs a large favorable move to be worth anything; if the direction is right but the underlying only nudges, you bleed for nothing — unless you are explicitly playing a loss-capped head betting on a big move, don't pick it. ITM/ATM have high delta, track the underlying closely, and are the mid-body default.
+  2. **How far is breakeven from spot?** The breakeven (balance point) = where the underlying must reach before the warrant stops losing. The larger the favorable move breakeven demands, the more it is a lottery ticket. Compare it to your target: if your target doesn't even reach breakeven → no trade.
+  3. **How much does premium eat?** High premium (say >20%) means most of the price is time value / water level, so flat-to-small-favorable action bleeds. A low-premium ITM warrant leaves the directional payoff to you.
+- **Instrument by fish-segment**: head → OTM loss-capped (explicitly betting on a big move, loss capped); mid-body → ATM / ITM warrant (high delta, low premium, converting direction efficiently).
+- **Instrument by horizon**: short hold → ITM (low theta, high delta); swing → ATM/OTM (convexity); longer → discount theta, and an OTM warrant should not be held too long.
+- **Size the stop by leverage — do NOT copy the stock's technical level.** A warrant stop ≠ the stock's technical-failure level (neckline / platform / round number). Reverse the order: first set the **bearable warrant drawdown** (e.g. −10~12%) → ÷ effective leverage = the underlying's tolerance → add to entry to get the underlying stop. Copying the stock level lets leverage multiply the stop several-fold (e.g. underlying −8% × 3x ≈ warrant −24%, breaking L1 "leave at the stop, don't hold to zero").
 
 ## L9 Data realities (Longbridge MCP)
 - No direct warrant theta (estimate from IV + expiry);

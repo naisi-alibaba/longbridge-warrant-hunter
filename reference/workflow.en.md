@@ -22,14 +22,15 @@
 - Output: call × {head/mid} and put × {head/mid} candidates; tails cleared, but note "reverse potential heads" (large distributing at a high → put head; large accumulating at a low → call head).
 
 ## Stage 3 · Warrant structure screen (the second gate)
-- Tools: `warrantList` (sort by IV ascending; also pull matching Bull/Bear CBBCs), `calcIndexes` for Premium/Delta/EffLev, `staticInfo` for lot size.
+- Tools: `warrantList` (**calls/puts only — do NOT pull Bull/Bear CBBCs**), `calcIndexes` for Premium/Delta/EffLev/moneyness/breakeven, `staticInfo` for lot size.
 - Gate (framework L7/L8): IV not at a sector extreme, expiry ≥3 months, street-ratio <50%, acceptable spread; **both the stock fish gate and the warrant economics gate must pass**.
-- Output: 1–3 candidate warrants per name (ITM/ATM/OTM or Bull/Bear CBBC).
+- **Selection (L8 three questions)**: among several candidates on the same name, don't pick by "biggest effective leverage" — check **moneyness** first (deep OTM = a lottery unless it's a loss-capped head), **breakeven vs spot** (if your target can't reach breakeven, no trade), and **premium** (>20% bleeds while flat). Mid-body prefers a high-delta ITM/ATM warrant.
+- Output: 1–3 candidate warrants per name (ITM/ATM/OTM).
 
 ## Stage 4 · Quantify R:R × holding horizon + hazard sweep
 - Set base/target/stop levels → compute scenario returns and R:R using effective leverage (label it a linear approximation; convexity makes the favorable side better; it assumes "leave at the stop").
-- Bucket by holding horizon as needed (e.g. short / swing / longer): short → CBBC/ITM (low theta); swing → ATM/OTM (convexity); longer → discount theta, and an OTM warrant should not be held too long.
-- Hazards: extreme IV, excessive street-ratio, thin liquidity, call price too close, no warrant.
+- Bucket by holding horizon as needed (e.g. short / swing / longer): short → ITM (low theta, high delta); swing → ATM/OTM (convexity); longer → discount theta, and an OTM warrant should not be held too long.
+- Hazards: extreme IV, excessive street-ratio, thin liquidity, deep OTM / breakeven too far, no warrant.
 
 ## Stage 5 · Pre-execution live confirmation
 - Tools: `warrantQuote` (live price/IV/delta), `depth` (bid-ask spread + depth), `capitalFlow` (live net flow) + `capitalDistribution` (structure).

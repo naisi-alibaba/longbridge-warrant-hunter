@@ -2,9 +2,9 @@
 
 **🌐 [中文](README.md) · English (current)**
 
-> A Claude **Agent Skill** that hunts high risk-reward Hong Kong warrants (窝轮) and CBBCs (牛熊证), long & short, on top of the **Longbridge OpenAPI MCP**. Direction-first, evidence-driven — not a news summarizer.
+> A Claude **Agent Skill** that hunts high risk-reward Hong Kong warrants (窝轮, calls/puts), long & short, on top of the **Longbridge OpenAPI MCP**. Direction-first, evidence-driven — not a news summarizer. Plain warrants only, no CBBCs.
 
-> 📌 **Current version v3 (2026-06-26)** — adds "exit-side structure re-screen" + "stop sized by leverage". See [`CHANGELOG.md`](CHANGELOG.md) for the version diff and methodology evolution.
+> 📌 **Current version v4 (2026-08-12)** — narrows to plain warrants only, drops CBBCs; adds a "lottery leverage" warning + the "three selection questions" (moneyness / breakeven / premium). See [`CHANGELOG.md`](CHANGELOG.md) for the version diff and methodology evolution.
 
 ---
 
@@ -15,7 +15,7 @@ Runs a fixed workflow:
 ```
 Blind-scan the whole market for anomalies → two-way fish-positioning (head/mid/tail)
    → money-structure verification (no false kills) → screen warrants (IV/leverage/expiry/
-   street-ratio/spread, two gates) → quantify risk-reward × holding horizon
+   street-ratio/spread, two gates + three selection questions) → quantify risk-reward × holding horizon
    → order-book confirmation → an "action board"
    (name × segment × instrument × R:R × horizon × trigger × stop × size)
 ```
@@ -66,7 +66,7 @@ npx degit naisi-alibaba/longbridge-warrant-hunter ~/.claude/skills/longbridge-wa
 Trigger in chat (or via your client's skill-invocation):
 
 - "Any good risk-reward call/put warrants in HK right now?" → whole-market two-way scan
-- "Pick me a warrant / CBBC on SMIC" → single-name fish-positioning + selection
+- "Pick me a warrant on SMIC" → single-name fish-positioning + selection
 - "Call or put now, which warrant, what stop/target?"
 
 The skill reads `reference/framework.{md|en.md}` (criteria) + `reference/workflow.{md|en.md}` (steps).
@@ -86,7 +86,7 @@ The skill reads `reference/framework.{md|en.md}` (criteria) + `reference/workflo
 
 ## ⚠️ Disclaimer
 
-This skill is a research/analysis tool only and is **NOT investment advice**. HK warrants and CBBCs are **high-leverage instruments that can go to zero or be mandatorily called**. Any trade decision based on this skill's output, and its outcome, is solely the user's responsibility. **Strongly validate the framework on a paper account before considering real money.** The authors accept no liability for any losses.
+This skill is a research/analysis tool only and is **NOT investment advice**. HK warrants are **high-leverage instruments that can go to zero**. Plain warrants only — this skill does not trade CBBCs (uncontrollable mandatory-call risk). Any trade decision based on this skill's output, and its outcome, is solely the user's responsibility. **Strongly validate the framework on a paper account before considering real money.** The authors accept no liability for any losses.
 
 ## 📄 License
 

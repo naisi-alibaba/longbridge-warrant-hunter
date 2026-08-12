@@ -5,6 +5,27 @@
 
 ---
 
+## v4 — 2026-08-12 · 选券质量（Selection quality）
+
+**触发 / Trigger**：同一天、同一个方向判断（看空快手 1024.HK），两条独立跑的决策链都定案"做空快手认沽"，方向都对、正股也确实在跌——却交出天差地别的结果：一条选了深度价内证（+10.3%），另一条选了深度价外证（几乎打平）。根因不在方向、不在流动性，而在**选券**（选哪只轮）——本框架此前最没展开的一环。
+On one day, on one directional call (short Kuaishou 1024.HK), two independently-run decision chains both concluded "short Kuaishou via a put" — both right on direction, and the stock did fall — yet returned wildly different results: one picked a deep-ITM warrant (+10.3%), the other a deep-OTM warrant (≈ breakeven). The root cause was neither direction nor liquidity but **selection** — which warrant you pick, the least-developed link in this framework.
+
+**方法论更新 / What changed**
+
+1. **只做窝轮，剔除牛熊证（CBBC）/ plain warrants only, CBBCs dropped**：牛熊证的强制收回机制触及收回价即时归零、不可控，风险性质与窝轮不同。v4 起框架整体排除 CBBC——L2/L8 的工具选择只在窝轮的价内/平价/价外之间做，description/workflow/铁律同步收拢。
+   CBBCs knock out to zero the instant the underlying touches the call price — uncontrollable, a different risk nature from warrants. From v4 the framework excludes CBBCs wholesale — instrument choice in L2/L8 is only among ITM/ATM/OTM plain warrants.
+
+2. **"彩票杠杆"告警（L1 新增）/ "lottery leverage" warning (new in L1)**：接口给的"有效杠杆"是瞬时理论值；深度价外证价格分母极小，会把它灌成虚高。方向对、但标的只小幅顺行时，这种高杠杆兑现不了，反被 theta + 价差侵蚀。快手那单正是被"有效杠杆 7.8x 最大"勾走，选了 delta 仅 −0.12 的深度价外证。**别按"杠杆最大"选券。**
+   The "effective leverage" the API reports is instantaneous and theoretical; a deep-OTM warrant's tiny price denominator inflates it. When the direction is right but the underlying moves only a little, that leverage never materializes and theta + spread bleed it. The Kuaishou trade was lured by "7.8x, the highest" into a deep-OTM warrant with delta only −0.12. **Never pick by biggest leverage.**
+
+3. **选券三问（L8 新增）/ the three selection questions (new in L8)**：同一标的多只候选轮之间怎么挑，落成三个必答问题——① 价内外多少（深度价外=彩票）；② 回本点距现价多远（目标够不到回本就不做）；③ 溢价吃掉多少（>20% 横盘漏血）。鱼中优先价内/平价高 delta 证。
+   How to choose among candidates on the same name, made concrete: ① how far ITM/OTM (deep OTM = a lottery); ② how far is breakeven from spot (if your target can't reach breakeven, no trade); ③ how much premium eats (>20% bleeds while flat). Mid-body prefers a high-delta ITM/ATM warrant.
+
+**与 v3.1 的关系 / Relation to v3.1**：v3/v3.1 补的是离场端（该卖时卖、及时看见），v4 补的是**进场端的选券质量**——方向对了也可能因选错工具把红利打没。判断被真实数据反转（"选杠杆最大"被证伪）→ **升大版 v4**。
+v3/v3.1 fixed the exit side (sell when you should, see it in time); v4 fixes **entry-side selection quality** — a right call can still be squandered by the wrong instrument. A call reversed by real data ("pick the biggest leverage" falsified) → **major bump to v4.**
+
+---
+
 ## v3.1 — 2026-06-29 · 结构监控落地（Structure monitoring operationalized）
 
 **触发 / Trigger**：不是判断被反转，而是 v3 留下的执行洞——v3 说「结构翻转就离场」，但**价格能用原生预警 push，结构（大单/capital_flow）长桥无 push、大单无历史**，手判会漂移、会迟到（06-26 中芯即如此）。本版把 v3 的判断**落成可执行的轮询 + 机器判据**。

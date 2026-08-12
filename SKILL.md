@@ -1,15 +1,15 @@
 ---
 name: longbridge-warrant-hunter
-description: 港股权证（窝轮/牛熊证 CBBC）盈亏比猎手，多空双向。基于 Longbridge OpenAPI MCP 的全市场行情与资金数据，按固定工作流：盲扫锁异常 → 鱼身定位（头/中/尾） → 资金结构验证 → 筛权证 → 量化盈亏比×持仓周期 → 盘口确认 → 出行动盘。当用户想在港股市场寻找盈亏比高的认购/认沽权证、或对某个标的做权证择时与选轮时使用。需连接 Longbridge OpenAPI MCP。本技能仅为研究分析工具，非投资建议；权证为高杠杆品种，请用模拟盘验证。 | EN: HK warrant (window-warrants / CBBC) risk-reward hunter, long & short, on the Longbridge OpenAPI MCP — blind-scan anomalies, fish-positioning (head/mid/tail), money-structure check, screen warrants, quantify risk-reward × holding horizon, order-book confirm, action board. Use when the user wants high risk-reward HK call/put warrants, or warrant timing & selection on a specific name. Requires Longbridge OpenAPI MCP. Research/analysis tool, not investment advice; high-leverage instruments — validate on paper first.
+description: 港股窝轮（认购/认沽）盈亏比猎手，多空双向。基于 Longbridge OpenAPI MCP 的全市场行情与资金数据，按固定工作流：盲扫锁异常 → 鱼身定位（头/中/尾） → 资金结构验证 → 筛窝轮 → 量化盈亏比×持仓周期 → 盘口确认 → 出行动盘。只做窝轮、不做牛熊证（CBBC 有强制收回、风险不可控）。当用户想在港股市场寻找盈亏比高的认购/认沽窝轮、或对某个标的做窝轮择时与选轮时使用。需连接 Longbridge OpenAPI MCP。本技能仅为研究分析工具，非投资建议；权证为高杠杆品种，请用模拟盘验证。 | EN: HK plain-warrant (calls/puts) risk-reward hunter, long & short, on the Longbridge OpenAPI MCP — blind-scan anomalies, fish-positioning (head/mid/tail), money-structure check, screen warrants, quantify risk-reward × holding horizon, order-book confirm, action board. Plain warrants only — no CBBCs (mandatory-call risk is uncontrollable). Use when the user wants high risk-reward HK call/put warrants, or warrant timing & selection on a specific name. Requires Longbridge OpenAPI MCP. Research/analysis tool, not investment advice; high-leverage instruments — validate on paper first.
 ---
 
-# 港股权证盈亏比猎手（HK Warrant Hunter）
+# 港股窝轮盈亏比猎手（HK Warrant Hunter）
 
-多空双向，在港股权证（窝轮 + 牛熊证）里找**盈亏比高**的机会。核心不是播报，是按一套可证伪的判据**先定方向、再选结构**。
+多空双向，在港股**窝轮（认购/认沽）**里找**盈亏比高**的机会。核心不是播报，是按一套可证伪的判据**先定方向、再选结构**。**不做牛熊证（CBBC）**——强制收回机制触价即时归零、风险不可控，整体排除。
 
 ## 触发场景
-- "港股有没有盈亏比好的认购/认沽权证"
-- "帮我在 XXX（标的）上选只窝轮/牛熊证"
+- "港股有没有盈亏比好的认购/认沽窝轮"
+- "帮我在 XXX（标的）上选只窝轮"
 - "现在做认购还是认沽，挂哪只轮，止损止盈怎么定"
 
 ## 前置依赖
@@ -23,14 +23,16 @@ description: 港股权证（窝轮/牛熊证 CBBC）盈亏比猎手，多空双�
 3. 留空 = 全市场盲扫双向找方向；给定标的 = 直接进该标的的鱼身定位与选轮。
 
 ## 不可违背的铁律（详见 framework）
+- **只做窝轮认购/认沽，不做牛熊证（CBBC）**：强制收回触价即时归零，风险性质不同，整体排除。
 - **鱼尾按「资金结构翻转 + 抛物线速度」判，绝不按涨跌幅枪毙**；对"看起来涨/跌多"的票必须拉资金结构再裁。错杀 = 框架有洞。
 - **主力是参考不是裁决**：资金只确认/证伪方向判断，强信号也带止损。
-- **两道独立闸**：股票鱼身 ∩ 权证经济性（IV 非极值 / 到期≥3月 / 街货<50% / 价差可接受），全过才出手。
+- **两道独立闸**：股票鱼身 ∩ 窝轮经济性（IV 非极值 / 到期≥3月 / 街货<50% / 价差可接受），全过才出手。
+- **选券别只看杠杆**：深度价外证的"高有效杠杆"是低价分母灌出的彩票杠杆——选券先看价内外、回本点、溢价（L8 选券三问），鱼中优先价内/平价高 delta 证。
 - **已确认即动，犹豫放离场端**；"别追"≠等更便宜价；认沽止损更紧、仓位更小。
 - **矩阵决定输出，不凑认购/认沽对称**；某侧全是鱼尾就空仓等触发。
-- 长桥数据坑：K 线时间戳偏移 +1 日（用 prev_close 交叉校验）；权证无 theta 需估；部分标的无轮即出局。
+- 长桥数据坑：K 线时间戳偏移 +1 日（用 prev_close 交叉校验）；窝轮无 theta 需估；部分标的无轮即出局。
 
 ## 输出
 一张**行动盘**：标的 × 鱼段 × 工具 × 盈亏比 × 持仓周期 × 触发 × 止损 × 仓位。
 
-> ⚠️ 免责：本技能输出为基于公开行情的研究分析，**不构成任何投资建议**。权证/牛熊证为高杠杆、可归零、可强制收回的衍生品，盈亏自负。强烈建议先用模拟盘验证框架再考虑实盘。
+> ⚠️ 免责：本技能输出为基于公开行情的研究分析，**不构成任何投资建议**。窝轮为高杠杆、可归零的衍生品，盈亏自负。强烈建议先用模拟盘验证框架再考虑实盘。
